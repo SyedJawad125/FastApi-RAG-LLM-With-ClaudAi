@@ -1,0 +1,40 @@
+# =============================================================================
+# FILE: docker-compose.yml
+# =============================================================================
+version: '3.8'
+
+services:
+  rag-api:
+    build: .
+    container_name: rag-system
+    ports:
+      - "8000:8000"
+    environment:
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - EMBEDDING_MODEL=${EMBEDDING_MODEL:-all-MiniLM-L6-v2}
+      - GROQ_MODEL=${GROQ_MODEL:-llama-3.1-8b-instant}
+      - CHUNK_SIZE=${CHUNK_SIZE:-1000}
+      - CHUNK_OVERLAP=${CHUNK_OVERLAP:-200}
+      - MAX_CONTEXT_LENGTH=${MAX_CONTEXT_LENGTH:-4000}
+      - DEFAULT_TOP_K=${DEFAULT_TOP_K:-3}
+      - MAX_HISTORY_LENGTH=${MAX_HISTORY_LENGTH:-10}
+      - SESSION_TIMEOUT_MINUTES=${SESSION_TIMEOUT_MINUTES:-60}
+      - MAX_FILE_SIZE_MB=${MAX_FILE_SIZE_MB:-10}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+      - faiss-data:/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  faiss-data:
+    driver: local
+
+
