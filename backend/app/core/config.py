@@ -101,7 +101,7 @@ class Settings(BaseSettings):
     # -----------------------------
     # ✅ Database
     # -----------------------------
-    SQLALCHEMY_DATABASE_URL: str
+    # SQLALCHEMY_DATABASE_URL: str
 
     # -----------------------------
     # ✅ Authentication / Security

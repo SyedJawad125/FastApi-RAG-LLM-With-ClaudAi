@@ -7,19 +7,13 @@ logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 # Import Base and engine from database (use absolute import)
-from app.database import engine, Base
 
-# Import all models explicitly
-from app.models.user import User
-from app.models.role import Role
-from app.models.permission import Permission
-from app.models.image_category import ImageCategory
-from app.models.image import Image
+
+
 
 # Import routers
 from app.routers import (
-    employee, auth, user, 
-    role, permission,image_category, image, rag_router
+     rag_router
 )
 
 app = FastAPI(
@@ -70,22 +64,7 @@ def read_root():
     return {"message": "Hello from FastAPI!"}
 
 # Include all routers
-app.include_router(auth.router)
-app.include_router(user.router)
-app.include_router(employee.router)
-app.include_router(role.router)
-app.include_router(permission.router)
-app.include_router(image_category.router)
-app.include_router(image.router)
 app.include_router(rag_router.router)
-
-@app.on_event("startup")
-def startup_event():
-    print("Creating database tables...")
-    print(f"Engine URL: {engine.url}")
-    print(f"Tables in metadata: {Base.metadata.tables.keys()}")
-    Base.metadata.create_all(bind=engine)
-    print("Database tables created.")
 
 
 @app.get("/")
