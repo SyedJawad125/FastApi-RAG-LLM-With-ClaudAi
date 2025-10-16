@@ -10,7 +10,7 @@ from app.services.vectorstore import vector_store
 from app.services.groq_service import groq_service
 from app.services.memory_store import conversation_memory
 from app.services.prompt_template import build_contextualized_query
-from app.models.schemas import (
+from app.schemas.rag_schemas import (
     AskRequest, AskResponse, UploadResponse, 
     HealthResponse, ErrorResponse
 )
